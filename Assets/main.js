@@ -1,5 +1,7 @@
 // Initialize empty array of objects for saved events
-var events = [{}];
+var events = [];
+
+var startTime = 9;
 
 
 // Display current date in jumbotron
@@ -9,43 +11,82 @@ $("#currentDay").text(moment().format("llll"));
 console.log(moment().startOf('day').format("llll"));
 
 // Generate time blocks for 9 am to 5 pm
-for (let index = 9; index < 18; index++) {
+for (let index = 0; index < 9; index++) {
 
+    // Create row
     var divRow = $("<div class='row'>");
-    divRow.attr("id", index);
+    divRow.attr("data-id", index);
     $(".container").append(divRow);
 
+    events.push({ eventId: index });
+    console.log(events);
+
+    localStorage.setItem("events", JSON.stringify(events));
+
+    // Populate time column
     var tableTime = $('<div class="hour col-1">');
-    tableTime.text(moment(index, "hha").format("LT"));
+    tableTime.text(moment(startTime, "h").format("LT"));
+    startTime++;
     divRow.append(tableTime);
 
-    var tableDesc = $('<div class="description col-10">');
-    tableDesc.html("<textarea cols='60'></textarea>")
-    divRow.append(tableDesc);
+    // Create <textarea>s for events
+    var eventDesc = $('<div class="description col-10">');
+    var eventTextArea = $("<textarea cols='65'></textarea>");
+    eventDesc.html(eventTextArea);
+    eventTextArea.attr("data-id", index);
+    divRow.append(eventDesc);
 
-    var tableSave = $('<div class="saveBtn time-block col-1">');
-    tableSave.html("<i class='far fa-save'></i>");
-    tableSave.attr("id", index);
-    divRow.append(tableSave);
+    // Create save buttons
+    var saveDiv = $('<div class="saveBtn col-1">');
+    divRow.append(saveDiv);
+    var saveBtn = $("<i class='far fa-save'></i>");
+    saveDiv.html(saveBtn);
+    saveBtn.attr("data-id", index);
+
 
 };
 
 
 
 // Add event listener to save button
-$(".saveBtn").on("click", handleClick);
+$(".far").on("click", saveEvent);
 
-function handleClick() {
+function saveEvent() {
 
-    if (event.target.matches(".far")) {
+    // Get data-id of saveBtn which is set to index in array
 
-        currentId = parseInt(event.target.parentElement.id);
-        console.log(event.target);
+    // Alternate:
+    // parseInt(event.target.parentElement.id);
+    // console.log(event.target.parentElement.id);
 
-        events[currentId].description = $("description").val();
+    var dataId = $(this).attr("data-id");
+    console.log("The data-id of clicked item is: " + dataId);
 
-        console.log("Description saved for id: " + currentId);
 
-    }
+    // Take textarea value with that currentId and...
+
+    var eventText = $( "textarea[data-id|='dataId']" ).val();
+    console.log("Event text is " + eventText);
+    
+    // Alternate:
+    // var currentRow = document.getElementsByClassName("row " + currentId)
+    // console.log(currentRow);
+
+    // var currentText = currentRow.children[1].childNodes[7];
+    // console.log(currentText);
+
+    // set to description property of that ID/index in events array    
+
+    events[dataId].description = "descriptiontest";
+    console.log(events);
+    storeEvents();
+
+    console.log("Description saved for id: " + dataId);
+
 
 };
+
+
+function storeEvents() {
+    localStorage.setItem("events", JSON.stringify(events));
+}
