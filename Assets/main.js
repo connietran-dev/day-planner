@@ -1,5 +1,6 @@
 // Initialize empty array for saved events
 var events = JSON.parse(localStorage.getItem("events")) || [];
+var checkStorage = localStorage.getItem("events");
 var startTime = 9;
 var currentTime = moment();
 
@@ -9,7 +10,6 @@ $("#currentDay").text(currentTime.format("llll"));
 
 
 // Generate time blocks for 9 am to 5 pm
-
 for (let index = 0; index < 9; index++) {
 
     // Create row
@@ -17,10 +17,15 @@ for (let index = 0; index < 9; index++) {
     divRow.attr("data-id", index);
     $(".container").append(divRow);
 
-    // Create objects in events array with index as id for local storage
-    events.push({ eventId: index });
-    console.log(events);
-    localStorage.setItem("events", JSON.stringify(events));
+    if (checkStorage === null) {
+
+        // Create objects in events array with index as id for local storage
+        events.push({ eventId: index });
+        console.log(events);
+        localStorage.setItem("events", JSON.stringify(events));
+        
+    };
+
 
     // Populate first column with time
     var tableTime = $('<div class="hour col-1">');
@@ -56,8 +61,8 @@ for (let index = 0; index < 9; index++) {
 
 
 
-// Set classes for past, present, future time block
 
+// Set classes for past, present, future time block
 function setDescClass() {
 
     // Set class for Description div based on past/present/future
@@ -87,7 +92,6 @@ $(".far").on("click", function () {
     // Get data-id of saveBtn which is set to index in array
     var dataId = $(this).attr("data-id");
     console.log("The data-id of clicked item is: " + dataId);
-
 
     // Take textarea value with that currentId and...
     var eventText = $(`textarea[data-id|='${dataId}']`).val();
