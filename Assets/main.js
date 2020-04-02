@@ -1,14 +1,14 @@
-// Initialize empty array of objects for saved events
-var events = [];
+// Initialize empty array for saved events
+var events = JSON.parse(localStorage.getItem("events")) || [];
 
 var startTime = 9;
 
 
 // Display current date in jumbotron
 $("#currentDay").text(moment().format("llll"));
-
 // TODO: Remove - for testing moment
 console.log(moment().startOf('day').format("llll"));
+
 
 // Generate time blocks for 9 am to 5 pm
 for (let index = 0; index < 9; index++) {
@@ -18,12 +18,12 @@ for (let index = 0; index < 9; index++) {
     divRow.attr("data-id", index);
     $(".container").append(divRow);
 
+    // Create objects in events array with index as id for local storage
     events.push({ eventId: index });
     console.log(events);
-
     localStorage.setItem("events", JSON.stringify(events));
 
-    // Populate time column
+    // Populate first column with time
     var tableTime = $('<div class="hour col-1">');
     tableTime.text(moment(startTime, "h").format("LT"));
     startTime++;
@@ -31,10 +31,24 @@ for (let index = 0; index < 9; index++) {
 
     // Create <textarea>s for events
     var eventDesc = $('<div class="description col-10">');
-    var eventTextArea = $("<textarea cols='65'></textarea>");
+    var eventTextArea = $('<textarea cols="65"></textarea>');
     eventDesc.html(eventTextArea);
     eventTextArea.attr("data-id", index);
     divRow.append(eventDesc);
+
+    // Get event description out of local storage to display in text event
+    var eventArray = JSON.parse(localStorage.getItem("events"));
+    var eventText = events[index].description;
+    eventTextArea.val(eventText);
+
+    // eventTextArea.val(eventDisplay);
+
+    // if (eventDesc) {
+    //     eventTextArea.value = description;
+    //   } else {
+    //     eventTextArea.value = "";
+    //   }
+
 
     // Create save buttons
     var saveDiv = $('<div class="saveBtn col-1">');
@@ -65,7 +79,7 @@ function saveEvent() {
 
     // Take textarea value with that currentId and...
 
-    var eventText = $( "textarea[data-id|='dataId']" ).val();
+    var eventText = $( `textarea[data-id|='${dataId}']` ).val();
     console.log("Event text is " + eventText);
     
     // Alternate:
@@ -77,16 +91,12 @@ function saveEvent() {
 
     // set to description property of that ID/index in events array    
 
-    events[dataId].description = "descriptiontest";
+    events[dataId].description = eventText;
     console.log(events);
-    storeEvents();
+    
+    localStorage.setItem("events", JSON.stringify(events));
 
     console.log("Description saved for id: " + dataId);
 
 
 };
-
-
-function storeEvents() {
-    localStorage.setItem("events", JSON.stringify(events));
-}
