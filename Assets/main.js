@@ -1,16 +1,15 @@
 // Initialize empty array for saved events
 var events = JSON.parse(localStorage.getItem("events")) || [];
-
 var startTime = 9;
+var currentTime = moment();
 
 
 // Display current date in jumbotron
-$("#currentDay").text(moment().format("llll"));
-// TODO: Remove - for testing moment
-console.log(moment().startOf('day').format("llll"));
+$("#currentDay").text(currentTime.format("llll"));
 
 
 // Generate time blocks for 9 am to 5 pm
+
 for (let index = 0; index < 9; index++) {
 
     // Create row
@@ -25,30 +24,25 @@ for (let index = 0; index < 9; index++) {
 
     // Populate first column with time
     var tableTime = $('<div class="hour col-1">');
-    tableTime.text(moment(startTime, "h").format("LT"));
-    startTime++;
+    var hour = moment(startTime, "h").format("LT")
+    tableTime.text(hour);
+
     divRow.append(tableTime);
 
-    // Create <textarea>s for events
+    // Create Description div and <textarea>s for events
     var eventDesc = $('<div class="description col-10">');
+    eventDesc.attr("data-time", startTime);
+
+    setDescClass();
+
     var eventTextArea = $('<textarea cols="65"></textarea>');
     eventDesc.html(eventTextArea);
     eventTextArea.attr("data-id", index);
     divRow.append(eventDesc);
 
     // Get event description out of local storage to display in text event
-    var eventArray = JSON.parse(localStorage.getItem("events"));
     var eventText = events[index].description;
     eventTextArea.val(eventText);
-
-    // eventTextArea.val(eventDisplay);
-
-    // if (eventDesc) {
-    //     eventTextArea.value = description;
-    //   } else {
-    //     eventTextArea.value = "";
-    //   }
-
 
     // Create save buttons
     var saveDiv = $('<div class="saveBtn col-1">');
@@ -57,8 +51,34 @@ for (let index = 0; index < 9; index++) {
     saveDiv.html(saveBtn);
     saveBtn.attr("data-id", index);
 
+    startTime++;
 
 };
+
+
+
+// Set classes for past, present, future time block
+
+function setDescClass() {
+
+    // Set class for Description div based on past/present/future
+    if (moment(startTime).isBefore(currentTime)) {
+        eventDesc.attr("class", "past");
+        console.log("past");
+    };
+
+    if (moment(startTime).isSame(currentTime)) {
+        eventDesc.attr("class", "present");
+        console.log("present");
+    };
+
+    if (moment(startTime).isAfter(currentTime)) {
+        eventDesc.attr("class", "future");
+        console.log("future");
+    };
+
+};
+
 
 
 
@@ -79,9 +99,9 @@ function saveEvent() {
 
     // Take textarea value with that currentId and...
 
-    var eventText = $( `textarea[data-id|='${dataId}']` ).val();
+    var eventText = $(`textarea[data-id|='${dataId}']`).val();
     console.log("Event text is " + eventText);
-    
+
     // Alternate:
     // var currentRow = document.getElementsByClassName("row " + currentId)
     // console.log(currentRow);
@@ -93,7 +113,7 @@ function saveEvent() {
 
     events[dataId].description = eventText;
     console.log(events);
-    
+
     localStorage.setItem("events", JSON.stringify(events));
 
     console.log("Description saved for id: " + dataId);
