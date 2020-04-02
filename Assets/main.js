@@ -24,9 +24,8 @@ for (let index = 0; index < 9; index++) {
 
     // Populate first column with time
     var tableTime = $('<div class="hour col-1">');
-    var hour = moment(startTime, "h").format("LT")
+    var hour = moment(startTime, "h").format("LT");
     tableTime.text(hour);
-
     divRow.append(tableTime);
 
     // Create Description div and <textarea>s for events
@@ -35,7 +34,7 @@ for (let index = 0; index < 9; index++) {
 
     setDescClass();
 
-    var eventTextArea = $('<textarea cols="65"></textarea>');
+    var eventTextArea = $('<textarea cols="65" rows="3"></textarea>');
     eventDesc.html(eventTextArea);
     eventTextArea.attr("data-id", index);
     divRow.append(eventDesc);
@@ -47,7 +46,7 @@ for (let index = 0; index < 9; index++) {
     // Create save buttons
     var saveDiv = $('<div class="saveBtn col-1">');
     divRow.append(saveDiv);
-    var saveBtn = $("<i class='far fa-save'></i>");
+    var saveBtn = $("<i class='far fa-save fa-md'></i>");
     saveDiv.html(saveBtn);
     saveBtn.attr("data-id", index);
 
@@ -63,17 +62,17 @@ function setDescClass() {
 
     // Set class for Description div based on past/present/future
     if (moment(startTime).isBefore(currentTime)) {
-        eventDesc.attr("class", "past");
+        eventDesc.addClass("past");
         console.log("past");
     };
 
     if (moment(startTime).isSame(currentTime)) {
-        eventDesc.attr("class", "present");
+        eventDesc.addClass("present");
         console.log("present");
     };
 
     if (moment(startTime).isAfter(currentTime)) {
-        eventDesc.attr("class", "future");
+        eventDesc.addClass("future");
         console.log("future");
     };
 
@@ -83,34 +82,18 @@ function setDescClass() {
 
 
 // Add event listener to save button
-$(".far").on("click", saveEvent);
-
-function saveEvent() {
+$(".far").on("click", function () {
 
     // Get data-id of saveBtn which is set to index in array
-
-    // Alternate:
-    // parseInt(event.target.parentElement.id);
-    // console.log(event.target.parentElement.id);
-
     var dataId = $(this).attr("data-id");
     console.log("The data-id of clicked item is: " + dataId);
 
 
     // Take textarea value with that currentId and...
-
     var eventText = $(`textarea[data-id|='${dataId}']`).val();
     console.log("Event text is " + eventText);
 
-    // Alternate:
-    // var currentRow = document.getElementsByClassName("row " + currentId)
-    // console.log(currentRow);
-
-    // var currentText = currentRow.children[1].childNodes[7];
-    // console.log(currentText);
-
-    // set to description property of that ID/index in events array    
-
+    // Set to description property of that ID/index in events array    
     events[dataId].description = eventText;
     console.log(events);
 
@@ -119,4 +102,4 @@ function saveEvent() {
     console.log("Description saved for id: " + dataId);
 
 
-};
+});
