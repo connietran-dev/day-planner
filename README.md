@@ -1,46 +1,22 @@
-# 05 Third-Party APIs: Work Day Scheduler
+# Third-Party APIs: Work Day Scheduler
 
-Create a simple calendar application that allows the user to save events for each hour of the day. This app will run in the browser and feature dynamically updated HTML and CSS powered by jQuery.
+## Overview
 
-You'll need to use the [Moment.js](https://momentjs.com/) library to work with date and time. Be sure to read the documentation carefully and concentrate on using Moment.js in the browser.
+This is a calendar application that allows the user to save events for each hour of the work day. This app runs in the browser and features dynamically updated HTML and CSS generated using jQuery.
 
-## User Story
+## Technologies and Functionality
 
-```
-AS AN employee with a busy schedule
-I WANT to add important events to a daily planner
-SO THAT I can manage my time effectively
-```
+Dates are displayed throughout the calendar using the [Moment.js](https://momentjs.com/) library to format and work with date & time. 
 
-## Acceptance Criteria
+The application was built largely using JQuery. For example, the timeblocks for standard business hours are dynamically generated using JQuery. Although JQuery is a less popular nowadays, I utilized as much JQuery as possible as an educational exercise to learn JQuery and to continue to implementing common Javascript patterns. Nonetheless, JQuery combined with string literals makes for powerful code as demonstrated by my `.on('click')` with the Save icons on line 89 of `script.js`.
 
-```
-GIVEN I am using a daily planner to create a schedule
-WHEN I open the planner
-THEN the current day is displayed at the top of the calendar
-WHEN I scroll down
-THEN I am presented with timeblocks for standard business hours
-WHEN I view the timeblocks for that day
-THEN each timeblock is color coded to indicate whether it is in the past, present, or future
-WHEN I click into a timeblock
-THEN I can enter an event
-WHEN I click the save button for that timeblock
-THEN the text for that event is saved in local storage
-WHEN I refresh the page
-THEN the saved events persist
-```
+Bootstrap classes are set for each generated HTML element to utilize the Bootstrap grid. Saved events are also stored to local storage and will persist when the page is refreshed.
 
-The following animation demonstrates the application functionality:
+Each timeblock is color coded to indicate whether it is in the past, 
+present, or future. So check it out some time during your work day!
+
+The following animation is the comp that was provided to demonstrate the application functionality. However, I've put my own twist on the front-end styling with Google Fonts and some custom CSS.
+
+Enjoy!
 
 ![day planner demo](./Images/05-third-party-apis-homework-demo.gif)
-
-## Review
-
-You are required to submit the following for review:
-
-* The URL of the deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
